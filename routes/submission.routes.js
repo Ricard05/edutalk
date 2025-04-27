@@ -81,12 +81,13 @@ router.post("/", verifyToken, async (req, res) => {
 // Actualizar calificación de una entrega
 router.patch("/:id", verifyToken, async (req, res) => {
   try {
-    const { calification, status } = req.body;
+    const { grade, status } = req.body; 
+
     const submission = await Submission.findByPk(req.params.id);
 
     if (!submission) return res.status(404).json({ error: "Entrega no encontrada" });
 
-    await submission.update({ calification, status });
+    await submission.update({ grade, status });
 
     res.json({ message: "Entrega actualizada correctamente", submission });
   } catch (error) {

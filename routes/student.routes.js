@@ -51,4 +51,40 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 
+
+router.get("/student/:student_id", verifyToken, async (req, res) => {
+  try {
+    // Buscar primero las entregas
+    const submissions = await Submission.findAll({
+      where: { student_id: req.params.student_id },
+    });
+
+    // Si no hay entregas, devolver vacío
+    if (!submissions.length) {
+      return res.json([]);
+    }
+
+    // Luego, buscar la información del estudiante
+    const student = await Student.findByPk(req.params.student_id);
+
+    if (!student) {
+      return res.status(404).json({ error: "Estudiante no encontrado" });
+    }
+
+    // Agregar la información del estudiante a cada submission
+    const submissionsWithStudentInfo = submissions.map(submission => ({
+      ...submission.toJSON(),
+      student: {
+        id: student.id,
+        name: student.name,
+        lastname: student.lastname,
+      },
+    }));
+
+    res.json(submissionsWithStudentInfo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;
