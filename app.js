@@ -14,6 +14,7 @@ import submissionRoutes from "./routes/submission.routes.js";
 import commentsRoutes from "./routes/comment.routes.js";
 import quizzesRoutes from "./routes/quizzes.routes.js";
 import quizAttemptsRoutes from "./routes/quizAttempts.routes.js";
+import studentsRoutes from "./routes/student.routes.js";
 import sequelize from "./config/db.js";
 import "./models/User.js";
 import "./models/Conversation.js";
@@ -61,6 +62,7 @@ app.use("/api/course/", courseRoutes);
 app.use("/api/enrollment/", enrollmentRoutes);
 app.use("/api/submission/", submissionRoutes);
 app.use("/api/comments/", commentsRoutes);
+app.use("/api/students/", studentsRoutes);
 app.use("/api/quizzes/", quizzesRoutes);
 app.use("/api/quiz-attempts/", quizAttemptsRoutes);
 
