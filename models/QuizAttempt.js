@@ -25,7 +25,7 @@ const QuizAttempt = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: "students",
+        model: "students", // Asegúrate que tengas la tabla "students"
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -35,6 +35,8 @@ const QuizAttempt = sequelize.define(
     responses: {
       type: DataTypes.JSONB,
       allowNull: false,
+      // responses será un array de objetos tipo:
+      // { question_text: "Pregunta 1", student_answer: "Respuesta del alumno" }
     },
 
     score: {

@@ -7,12 +7,25 @@ const router = express.Router();
 // Crear un nuevo quiz
 router.post("/", verifyToken, async (req, res) => {
   try {
-    const { title, class_id, question_ids, start_date, end_date, time_limit_minutes, feedback_enabled } = req.body;
+    const { 
+      title, 
+      class_id, 
+      questions, 
+      start_date, 
+      end_date, 
+      time_limit_minutes, 
+      feedback_enabled 
+    } = req.body;
+
+    // Validar que manden preguntas
+    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({ error: "Debes enviar al menos una pregunta para crear el quiz." });
+    }
 
     const quiz = await Quiz.create({
       title,
       class_id,
-      question_ids,
+      questions,
       start_date,
       end_date,
       time_limit_minutes,
@@ -60,7 +73,21 @@ router.put("/:id", verifyToken, async (req, res) => {
     const quiz = await Quiz.findByPk(req.params.id);
     if (!quiz) return res.status(404).json({ error: "Quiz no encontrado" });
 
-    await quiz.update(req.body);
+    const { title, questions, start_date, end_date, time_limit_minutes, feedback_enabled } = req.body;
+
+    // Validar si envían questions que siga siendo un array
+    if (questions && (!Array.isArray(questions) || questions.length === 0)) {
+      return res.status(400).json({ error: "Si actualizas questions debe ser un arreglo válido con al menos una pregunta." });
+    }
+
+    await quiz.update({
+      title,
+      questions,
+      start_date,
+      end_date,
+      time_limit_minutes,
+      feedback_enabled,
+    });
 
     res.json({ message: "Quiz actualizado correctamente", quiz });
   } catch (error) {

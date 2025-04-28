@@ -26,8 +26,8 @@ const Quiz = sequelize.define(
       onDelete: "CASCADE",
     },
 
-    question_ids: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
+    questions: {
+      type: DataTypes.JSONB,
       allowNull: false,
     },
 
